@@ -4,7 +4,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 class UserManager(BaseUserManager):
     def create_user(self, username, email=None, password=None, first_name=None,
-                    last_name=None, phone=None, **extra_fields):
+                    last_name=None, phone_nr=None, **extra_fields):
         if not username:
             raise ValueError('Users must have a username')
 
@@ -13,7 +13,7 @@ class UserManager(BaseUserManager):
             email=UserManager.normalize_email(email),
             first_name=first_name or '',
             last_name=last_name or '',
-            phone=phone or '',
+            phone_nr=phone_nr or '',
         )
 
         user.set_password(password)
@@ -21,14 +21,14 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, email, password, first_name=None,
-                         last_name=None, phone=None):
+                         last_name=None, phone_nr=None):
         user = self.create_user(
             username,
             email,
             password=password,
             first_name=first_name,
             last_name=last_name,
-            phone=phone
+            phone_nr=phone_nr
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -40,6 +40,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=254, unique=True, db_index=True)
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
+    phone_nr = models.CharField(max_length=255, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
@@ -67,9 +68,3 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
-
-
-class Post(models.Model):
-    user = User
-    post = models.TextField()
-
