@@ -129,6 +129,7 @@ INSTALLED_APPS = (
 
     'roomt',
 
+    'south',
     'social_auth',
     'django.contrib.admin',
     'django.contrib.admindocs',

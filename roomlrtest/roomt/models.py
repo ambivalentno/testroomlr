@@ -20,15 +20,14 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password, first_name=None,
-                         last_name=None, phone_nr=None):
+    def create_superuser(self, username, password, email=None, first_name=None,
+                         last_name=None):
         user = self.create_user(
             username,
-            email,
+            email=email,
             password=password,
             first_name=first_name,
             last_name=last_name,
-            phone_nr=phone_nr
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -37,7 +36,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     username = models.CharField(max_length=255, unique=True)
-    email = models.EmailField(max_length=254, unique=True, db_index=True)
+    email = models.EmailField(max_length=254, blank=True)
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
     phone_nr = models.CharField(max_length=255, blank=True)
@@ -48,10 +47,10 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def get_full_name(self):
-        return self.email
+        return self.username
 
     def get_short_name(self):
         return self.first_name
@@ -61,7 +60,7 @@ class User(AbstractBaseUser):
         return self.is_admin
 
     def __unicode__(self):
-        return self.email
+        return self.username
 
     def has_perm(self, perm, obj=None):
         return True
