@@ -1,4 +1,9 @@
 *.py[cod]
+# Environment
+.env
+
+# Local settings
+roomlrtest/roomlrtest/local.py
 
 # C extensions
 *.so

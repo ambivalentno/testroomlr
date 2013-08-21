@@ -107,6 +107,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_auth.middleware.SocialAuthExceptionMiddleware',
 )
 
 ROOT_URLCONF = 'roomlrtest.urls'
@@ -163,3 +164,19 @@ LOGGING = {
         },
     }
 }
+
+AUTHENTICATION_BACKENDS = (
+    # 'social_auth.backends.google.GoogleOAuth2Backend',
+    'social_auth.backends.twitter.TwitterBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = '/post'
+LOGIN_ERROR_URL = '/error'
+
+AUTH_USER_MODEL = 'myapp.User'
+
+from local import *
+
+
